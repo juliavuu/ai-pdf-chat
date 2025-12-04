@@ -79,5 +79,12 @@ elif uploaded_file is None:
     st.info("👈 Bitte lade erst links deinen Lebenslauf hoch.")
 elif not job_description:
     st.info("👉 Bitte kopiere rechts eine Stellenanzeige rein.")
-    
+# --- ANFANG NEUER CODE ---
+import os
+import streamlit as st
+
+# Wenn wir in der Cloud sind, holen wir den Key aus den Secrets und speichern ihn im System
+if "OPENAI_API_KEY" in st.secrets:
+    os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+# --- ENDE NEUER CODE ---
 
