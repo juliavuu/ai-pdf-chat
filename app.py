@@ -21,4 +21,3 @@ if not api_key:
 # --- HIER GEHT DEIN CODE WEITER ---
 # (Ab hier kommen deine Imports wie PyPDF2, LangChain usw.)
 
-
