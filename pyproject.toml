@@ -1,0 +1,19 @@
+[project]
+name = "ai-starter-kit"
+version = "0.1.0"
+description = "Reusable starter kit for ML/AI projects"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
