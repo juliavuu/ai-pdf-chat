@@ -7,6 +7,8 @@ from torch import nn
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 
+import wandb
+
 
 @dataclass
 class Config:
@@ -16,6 +18,8 @@ class Config:
     seed: int = 42
     num_workers: int = 0  # mac: 0 ist ok/stabil
     save_dir: str = "artifacts"
+    wandb_project: str = "ai-starter-kit-mnist"
+    wandb_run_name: str = ""
     overfit_one_batch: bool = False  # Debug: sollte schnell Richtung 100% gehen
 
 
@@ -62,6 +66,10 @@ def train(cfg: Config) -> None:
     set_seed(cfg.seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Device: {device}")
+
+    wandb.init(project=cfg.wandb_project, name=(cfg.wandb_run_name or None), config=cfg.__dict__)
+    wandb.define_metric("epoch")
+    wandb.define_metric("*", step_metric="epoch")
 
     tfm = transforms.Compose(
         [
@@ -119,7 +127,7 @@ def train(cfg: Config) -> None:
                 loss.backward()
                 opt.step()
 
-                running_loss += float(loss) * x.size(0)
+                running_loss += float(loss.detach()) * x.size(0)
                 pred = logits.argmax(dim=1)
                 correct += int((pred == y).sum())
                 n += x.size(0)
@@ -137,6 +145,7 @@ def train(cfg: Config) -> None:
     ckpt_path = save_dir / "mnist_mlp.pt"
     torch.save({"model_state": model.state_dict(), "config": cfg.__dict__}, ckpt_path)
     print(f"Saved checkpoint to: {ckpt_path}")
+    wandb.finish()
 
 
 def parse_args() -> Config:
@@ -146,6 +155,8 @@ def parse_args() -> Config:
     p.add_argument("--epochs", type=int, default=Config.epochs)
     p.add_argument("--seed", type=int, default=Config.seed)
     p.add_argument("--save-dir", type=str, default=Config.save_dir)
+    p.add_argument("--wandb-project", type=str, default=Config.wandb_project)
+    p.add_argument("--wandb-run-name", type=str, default=Config.wandb_run_name)
     p.add_argument("--overfit-one-batch", action="store_true")
     args = p.parse_args()
     return Config(
@@ -154,6 +165,8 @@ def parse_args() -> Config:
         epochs=args.epochs,
         seed=args.seed,
         save_dir=args.save_dir,
+        wandb_project=args.wandb_project,
+        wandb_run_name=args.wandb_run_name,
         overfit_one_batch=args.overfit_one_batch,
     )
 
