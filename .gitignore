@@ -8,3 +8,11 @@ build/
 *.egg-info/
 .DS_Store
 .env
+
+# ML artifacts / datasets
+data/
+artifacts/
+
+# ML artifacts / datasets
+data/
+artifacts/
