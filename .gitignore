@@ -17,3 +17,9 @@ artifacts/
 data/
 artifacts/
 wandb/
+
+# W&B
+wandb/
+
+# checkpoints/artifacts
+artifacts/
