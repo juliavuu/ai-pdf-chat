@@ -112,6 +112,9 @@ def train(cfg: Config) -> None:
             acc = (logits.argmax(dim=1) == y0).float().mean().item()
             print(f"epoch {epoch + 1}/{cfg.epochs} | loss {loss.item():.4f} | acc {acc:.4f}")
 
+        if wandb.run is not None:
+            wandb.log({"loss": loss.item(), "acc": acc}, step=epoch + 1)
+
     else:
         for epoch in range(cfg.epochs):
             model.train()
@@ -141,6 +144,17 @@ def train(cfg: Config) -> None:
                 f"train_loss {train_loss:.4f} | train_acc {train_acc:.4f} | "
                 f"test_loss {test_loss:.4f} | test_acc {test_acc:.4f}"
             )
+
+            if wandb.run is not None:
+                wandb.log(
+                    {
+                        "train_loss": train_loss,
+                        "train_acc": train_acc,
+                        "test_loss": test_loss,
+                        "test_acc": test_acc,
+                    },
+                    step=epoch + 1,
+                )
 
     ckpt_path = save_dir / "mnist_mlp.pt"
     torch.save({"model_state": model.state_dict(), "config": cfg.__dict__}, ckpt_path)

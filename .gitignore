@@ -16,3 +16,4 @@ artifacts/
 # ML artifacts / datasets
 data/
 artifacts/
+wandb/
