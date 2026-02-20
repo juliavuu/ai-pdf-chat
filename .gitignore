@@ -1,25 +1,25 @@
+# Python / virtual env
 .venv/
 __pycache__/
 *.pyc
+
+# Caches
 .pytest_cache/
 .ruff_cache/
+
+# Build outputs
 dist/
 build/
 *.egg-info/
+
+# OS / editor
 .DS_Store
 .env
 
-# ML artifacts / datasets
+# ML datasets & artifacts
 data/
 artifacts/
 
-# ML artifacts / datasets
-data/
-artifacts/
+# Weights & Biases
 wandb/
 
-# W&B
-wandb/
-
-# checkpoints/artifacts
-artifacts/
